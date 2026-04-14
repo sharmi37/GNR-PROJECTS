@@ -11,21 +11,21 @@ app.use(express.json());
 const pool = mysql.createPool({
   host: "localhost",
   user: "root",
-  password: "root",      // ← your MySQL password
+  password: "root",      
   database: "goldvault_db",
 });
 
 
 pool.getConnection()
   .then(conn => {
-    console.log("✅ MySQL connected successfully");
+    console.log(" MySQL connected successfully");
     conn.release();
   })
   .catch(err => {
-    console.error("❌ MySQL Error:", err.message);
+    console.error(" MySQL Error:", err.message);
     console.error("Error code:", err.code);
   });
-// ─── GOLD RATES ───────────────────────────────────────────────
+
 app.get("/api/gold-rates", async (req, res) => {
   try {
     const [rows] = await pool.query("SELECT * FROM gold_rates");
@@ -48,7 +48,7 @@ app.put("/api/gold-rates/:karat", async (req, res) => {
   }
 });
 
-// ─── CUSTOMERS ────────────────────────────────────────────────
+
 app.get("/api/customers", async (req, res) => {
   try {
     const [rows] = await pool.query(
@@ -98,7 +98,7 @@ app.put("/api/customers/:id", async (req, res) => {
   }
 });
 
-// ─── JEWELLERY ITEMS ─────────────────────────────────────────
+
 app.get("/api/items", async (req, res) => {
   try {
     const { status, category } = req.query;
