@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import API from "API";
+import API from "./Api.js";
 
 export default function Home() {
   const navigate = useNavigate();
