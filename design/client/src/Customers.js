@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import API from "API";
 import { toast } from "react-toastify";
 
 const empty = { name: "", phone: "", email: "", address: "", id_proof: "" };
@@ -10,16 +10,16 @@ export default function Customers() {
   const [editId, setEditId] = useState(null);
   const [search, setSearch] = useState("");
 
-  const load = () => axios.get("/api/customers").then((r) => setCustomers(r.data));
+  const load = () => API.get("/api/customers").then((r) => setCustomers(r.data));
   useEffect(() => { load(); }, []);
 
   const handleSubmit = async () => {
     try {
       if (editId) {
-        await axios.put(`/api/customers/${editId}`, form);
+        await API.put(`/api/customers/${editId}`, form);
         toast.success("Customer updated");
       } else {
-        await axios.post("/api/customers", form);
+        await API.post("/api/customers", form);
         toast.success("Customer added");
       }
       setForm(empty); setEditId(null); load();
