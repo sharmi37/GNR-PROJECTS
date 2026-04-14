@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import API from "API";
+import API from "./Api.js";
 import { toast } from "react-toastify";
 
 const empty = { name: "", phone: "", email: "", address: "", id_proof: "" };
