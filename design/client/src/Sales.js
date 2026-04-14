@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import API from "API";
 import { toast } from "react-toastify";
 
 const today = () => new Date().toISOString().split("T")[0];
@@ -12,15 +12,15 @@ export default function Sales() {
   const [form, setForm] = useState(empty);
 
   const load = () => {
-    axios.get("/api/sales").then((r) => setSales(r.data));
-    axios.get("/api/items?status=available").then((r) => setItems(r.data));
-    axios.get("/api/customers").then((r) => setCustomers(r.data));
+    API.get("/api/sales").then((r) => setSales(r.data));
+    API.get("/api/items?status=available").then((r) => setItems(r.data));
+    API.get("/api/customers").then((r) => setCustomers(r.data));
   };
   useEffect(() => { load(); }, []);
 
   const handleSubmit = async () => {
     try {
-      await axios.post("/api/sales", form);
+      await API.post("/api/sales", form);
       toast.success("Sale recorded successfully");
       setForm(empty); load();
     } catch (e) {
