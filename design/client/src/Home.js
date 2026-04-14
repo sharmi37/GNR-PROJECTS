@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import API from "API";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -8,8 +8,8 @@ export default function Home() {
   const [rates, setRates] = useState([]);
 
   useEffect(() => {
-    axios.get("/api/items?status=available").then((r) => setItems(r.data.slice(0, 4)));
-    axios.get("/api/gold-rates").then((r) => setRates(r.data));
+    API.get("/api/items?status=available").then((r) => setItems(r.data.slice(0, 4)));
+    API.get("/api/gold-rates").then((r) => setRates(r.data));
   }, []);
 
   const iconImages = {
