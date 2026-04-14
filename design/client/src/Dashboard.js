@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import API from "API";
 
 export default function Dashboard() {
   const [stats, setStats] = useState(null);
@@ -7,9 +7,9 @@ export default function Dashboard() {
   const [sales, setSales] = useState([]);
 
   useEffect(() => {
-    axios.get("/api/dashboard").then((r) => setStats(r.data));
-    axios.get("/api/pledges?status=active").then((r) => setPledges(r.data.slice(0, 5)));
-    axios.get("/api/sales").then((r) => setSales(r.data.slice(0, 5)));
+    API.get("/api/dashboard").then((r) => setStats(r.data));
+    API.get("/api/pledges?status=active").then((r) => setPledges(r.data.slice(0, 5)));
+    API.get("/api/sales").then((r) => setSales(r.data.slice(0, 5)));
   }, []);
 
   const statCards = stats
