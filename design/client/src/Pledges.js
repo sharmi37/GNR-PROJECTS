@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import API from "API";
 import { toast } from "react-toastify";
 
 const today = () => new Date().toISOString().split("T")[0];
@@ -16,15 +16,15 @@ export default function Pledges() {
   const [newDue, setNewDue] = useState("");
 
   const load = () => {
-    axios.get("/api/pledges").then((r) => setPledges(r.data));
-    axios.get("/api/customers").then((r) => setCustomers(r.data));
-    axios.get("/api/items?status=available").then((r) => setItems(r.data));
+    API.get("/api/pledges").then((r) => setPledges(r.data));
+    API.get("/api/customers").then((r) => setCustomers(r.data));
+    API.get("/api/items?status=available").then((r) => setItems(r.data));
   };
   useEffect(() => { load(); }, []);
 
   const handleSubmit = async () => {
     try {
-      const res = await axios.post("/api/pledges", form);
+      const res = await API.post("/api/pledges", form);
       toast.success(`Pledge created: ${res.data.pledge_number}`);
       setForm(empty); load();
     } catch (e) {
@@ -35,7 +35,7 @@ export default function Pledges() {
   const handleRelease = async (id) => {
     if (!window.confirm("Release this pledge? Customer's gold will be returned.")) return;
     try {
-      await axios.put(`/api/pledges/${id}/release`);
+      await API.put(`/api/pledges/${id}/release`);
       toast.success("Pledge released successfully");
       load();
     } catch (e) {
@@ -45,7 +45,7 @@ export default function Pledges() {
 
   const handleExtend = async (id) => {
     try {
-      await axios.put(`/api/pledges/${id}/extend`, { new_due_date: newDue });
+      await API.put(`/api/pledges/${id}/extend`, { new_due_date: newDue });
       toast.success("Pledge extended");
       setExtendId(null); setNewDue(""); load();
     } catch (e) {
