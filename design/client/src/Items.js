@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import API from "API";
 import { toast } from "react-toastify";
 
 const empty = { name: "", category: "necklace", karat: "22K", weight_grams: "", description: "", market_price: "" };
@@ -11,16 +11,16 @@ export default function Items() {
   const [editId, setEditId] = useState(null);
   const [filter, setFilter] = useState("all");
 
-  const load = () => axios.get("/api/items").then((r) => setItems(r.data));
+  const load = () => API.get("/api/items").then((r) => setItems(r.data));
   useEffect(() => { load(); }, []);
 
   const handleSubmit = async () => {
     try {
       if (editId) {
-        await axios.put(`/api/items/${editId}`, form);
+        await API.put(`/api/items/${editId}`, form);
         toast.success("Item updated");
       } else {
-        await axios.post("/api/items", form);
+        await API.post("/api/items", form);
         toast.success("Item added to inventory");
       }
       setForm(empty); setEditId(null); load();
@@ -32,7 +32,7 @@ export default function Items() {
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this item?")) return;
     try {
-      await axios.delete(`/api/items/${id}`);
+      await API.delete(`/api/items/${id}`);
       toast.success("Item removed");
       load();
     } catch (e) {
