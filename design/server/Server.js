@@ -1,4 +1,5 @@
 
+
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
@@ -8,18 +9,35 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const pool = mysql.createPool(process.env.DATABASE_URL);
+// Debug
+console.log("DB URL:", process.env.DATABASE_URL);
 
+// Parse Railway URL
+const url = new URL(process.env.DATABASE_URL);
+
+const pool = mysql.createPool({
+  host: url.hostname,
+  user: url.username,
+  password: url.password,
+  database: url.pathname.replace("/", ""),
+  port: url.port,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+
+// Test connection
 pool.getConnection()
   .then(conn => {
-    console.log(" MySQL connected successfully");
+    console.log("✅ Railway MySQL connected!");
     conn.release();
   })
   .catch(err => {
-    console.error(" MySQL Error:", err.message);
-    console.error("Error code:", err.code);
+    console.error("❌ MySQL Error:", err.message);
   });
 
+
+// ─── GOLD RATES ───────────────────────────────────────────────
 app.get("/api/gold-rates", async (req, res) => {
   try {
     const [rows] = await pool.query("SELECT * FROM gold_rates");
@@ -42,7 +60,7 @@ app.put("/api/gold-rates/:karat", async (req, res) => {
   }
 });
 
-
+// ─── CUSTOMERS ────────────────────────────────────────────────
 app.get("/api/customers", async (req, res) => {
   try {
     const [rows] = await pool.query(
@@ -92,7 +110,7 @@ app.put("/api/customers/:id", async (req, res) => {
   }
 });
 
-
+// ─── JEWELLERY ITEMS ─────────────────────────────────────────
 app.get("/api/items", async (req, res) => {
   try {
     const { status, category } = req.query;
