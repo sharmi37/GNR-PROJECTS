@@ -6,11 +6,19 @@ export default function Dashboard() {
   const [pledges, setPledges] = useState([]);
   const [sales, setSales] = useState([]);
 
-  useEffect(() => {
-    API.get("/api/dashboard").then((r) => setStats(r.data));
-    API.get("/api/pledges?status=active").then((r) => setPledges(r.data.slice(0, 5)));
-    API.get("/api/sales").then((r) => setSales(r.data.slice(0, 5)));
-  }, []);
+ useEffect(() => {
+  API.get("/api/dashboard")
+    .then((r) => setStats(r.data))
+    .catch((err) => console.error("Dashboard error:", err));
+
+  API.get("/api/pledges?status=active")
+    .then((r) => setPledges(r.data.slice(0, 5)))
+    .catch((err) => console.error("Pledges error:", err));
+
+  API.get("/api/sales")
+    .then((r) => setSales(r.data.slice(0, 5)))
+    .catch((err) => console.error("Sales error:", err));
+}, []);
 
   const statCards = stats
     ? [
